@@ -1,0 +1,37 @@
+name: Weekly Backup (@zuegelofferte/web)
+on:
+  workflow_dispatch:
+env:
+  SOURCE_BUCKET: 'backup-zuegelofferte-web'
+  TARGET_BUCKET: ${{ vars.WEEKLY_BACKUP_TARGET_BUCKET }}
+jobs:
+  copy-latest-backup:
+    runs-on: ubuntu-latest
+    steps:
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
+      - name: Setup Rclone
+        uses: AnimMouse/setup-rclone@v1
+        with:
+          rclone_config: ${{ secrets.RCLONE_CONFIG_CONTENT }}
+      - name: Find latest Backup
+        run: |
+          LATEST_BACKUP=$(rclone lsf gcs:${{ env.SOURCE_BUCKET }} | grep -E "[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}/$" | sort -r | head -n1)
+          echo "LATEST_BACKUP=$LATEST_BACKUP" >> $GITHUB_ENV
+      - name: Copy files
+        run: |
+          rclone copy gcs:${{ env.SOURCE_BUCKET }}/${{ env.LATEST_BACKUP }} s3:${{ env.TARGET_BUCKET }}/${{ env.SOURCE_BUCKET }}/${{ env.LATEST_BACKUP }}
+        env:
+          RCLONE_S3_ACCESS_KEY_ID: ${{ secrets.RCLONE_S3_ACCESS_KEY_ID }}
+          RCLONE_S3_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_S3_SECRET_ACCESS_KEY }}
+      - name: alert on failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-Type: application/json' -d '{
+            "github_repository_name": "${{ github.repository }}",
+            "github_repository_url": "${{ github.server_url }}/${{ github.repository }}",
+            "github_workflow_name": "${{ github.workflow }}",
+            "github_action_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }' ${{ secrets.SLACK_WEBHOOK }}

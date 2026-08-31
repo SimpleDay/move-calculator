@@ -1,0 +1,4 @@
+# Generated artifacts — collapse in diffs, exclude from language stats (GitHub linguist).
+# payload-types.ts is deliberately absent: it stays reviewable.
+**/migrations/*.json linguist-generated=true
+apps/web/src/payload-generated-schema.ts linguist-generated=true

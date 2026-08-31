@@ -1,0 +1,19 @@
+.indicator {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+}
+
+.indicatorActive {
+  background-color: var(--theme-success-550);
+}
+
+.indicatorInactive {
+  background-color: var(--theme-error-500);
+}
+
+.cell {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}

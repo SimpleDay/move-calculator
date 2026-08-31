@@ -1,0 +1,57 @@
+name: Release (@zuegelofferte/web)
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        type: choice
+        description: 'Release Type'
+        required: true
+        options:
+          - release-candidate
+          - release
+          - hotfix-release-candidate
+          - hotfix-release
+env:
+  PREFIX: 'web'
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_GITHUB }} # Use Personal Access Token to trigger workflows
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache-dependency-path: pnpm-lock.yaml
+          cache: pnpm
+      - name: install dependencies
+        run: pnpm i --frozen-lockfile --ignore-scripts
+      - name: build action
+        run: npx --yes turbo build
+        working-directory: actions/release-tag-action
+      - name: Find Last Tag
+        id: gather
+        run: |
+          lastTagName=$(git describe --tags --match "${PREFIX}\@*" --abbrev=0 2>/dev/null || true)
+          if [[ -n "$lastTagName" ]]; then
+            echo "last-tag=$lastTagName" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Calculate Release Tag
+        id: release
+        uses: ./actions/release-tag-action
+        with:
+          branch: ${{ github.ref_name }}
+          release-type: ${{ github.event.inputs.release-type }}
+          previous-tag: ${{ steps.gather.outputs.last-tag }}
+          prefix: $PREFIX
+      - name: Tag and Push
+        run: |
+          git tag ${{ steps.release.outputs.next-tag }} ${{ steps.release.outputs.target-ref }}
+          git push --tags

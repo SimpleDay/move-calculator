@@ -1,0 +1,60 @@
+name: Check Pull Request
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    branches:
+      - main
+concurrency:
+  group: pull-request-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      TURBO_TEAM: ${{ vars.VERCEL_ORG_SLUG }}
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: zuegelofferte
+          POSTGRES_PASSWORD: zuegelofferte
+          POSTGRES_DB: zuegelofferte
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache-dependency-path: pnpm-lock.yaml
+          cache: pnpm
+      - name: install dependencies
+        run: pnpm install
+      - name: check types
+        run: pnpm run ci
+      - name: format files
+        run: pnpm run format
+      - name: lint files
+        run: pnpm run lint
+      - name: check generated files are unchanged
+        run: |
+          git add -N .
+          git diff --exit-code
+      - name: lint commit messages
+        if: github.actor != 'dependabot[bot]'
+        run: pnpm lint:commit --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }}

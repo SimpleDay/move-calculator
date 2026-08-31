@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "strict": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "isolatedModules": true,
+    "erasableSyntaxOnly": true,
+    "skipLibCheck": true,
+
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "lib": ["Es2022"],
+    "target": "ES2022",
+
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "${configDir}/dist",
+    "rootDir": "${configDir}",
+
+    "incremental": true,
+    "tsBuildInfoFile": "${configDir}/dist/tsconfig.tsbuildinfo",
+    "paths": {
+      "@/*": ["${configDir}/src/*"]
+    }
+  },
+  "include": ["${configDir}/src", "${configDir}/tsdown.config.ts"]
+}

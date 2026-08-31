@@ -1,0 +1,21 @@
+name: Release Tag Action
+inputs:
+  branch:
+    description: 'Branch to tag'
+    required: true
+  release-type:
+    description: 'Type of release'
+    required: true
+  previous-tag:
+    description: 'Tag to create'
+  prefix:
+    description: 'Prefix for tag'
+    required: true
+outputs:
+  next-tag:
+    description: 'Tag to created'
+  target-ref:
+    description: 'Ref to tag'
+runs:
+  using: node20
+  main: dist/index.mjs

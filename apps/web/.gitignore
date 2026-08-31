@@ -1,0 +1,6 @@
+.env
+.env.*
+!.env.example
+public/robots.txt
+public/sitemap*.xml
+public/media

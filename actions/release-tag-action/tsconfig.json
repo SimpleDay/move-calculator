@@ -1,0 +1,19 @@
+{
+  "extends": "@tsconfig/node22",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "tsdown.config.ts"]
+}

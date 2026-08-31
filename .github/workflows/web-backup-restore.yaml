@@ -1,0 +1,50 @@
+name: Restore (@zuegelofferte/web)
+on:
+  workflow_dispatch:
+    inputs:
+      backup-id:
+        type: string
+        description: 'Backup ID'
+        required: true
+      database-url:
+        type: string
+        description: 'Database URL'
+        required: true
+      bucket:
+        type: string
+        description: 'Bucket Name (without gs://)'
+        required: true
+env:
+  PG_VERSION: '17'
+  BACKUP_BUCKET: 'backup-zuegelofferte-web'
+jobs:
+  create-backups:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'mask database url'
+        run: |
+          DATABASE_URL=$(jq -r '.inputs."database-url"' $GITHUB_EVENT_PATH)
+          echo ::add-mask::$DATABASE_URL
+          echo DATABASE_URL=$DATABASE_URL >> $GITHUB_ENV
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
+      - name: Setup Rclone
+        uses: AnimMouse/setup-rclone@v1
+        with:
+          rclone_config: ${{ secrets.RCLONE_CONFIG_CONTENT }}
+      - name: Install PostgreSQL
+        run: |
+          sudo apt update
+          yes '' | sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+          sudo apt install -y postgresql-${{ env.PG_VERSION }}
+          echo "POSTGRES=/usr/lib/postgresql/${{ env.PG_VERSION }}/bin" >> $GITHUB_ENV
+      - name: Restore Assets
+        run: |
+          rclone copy gcs:${{ env.BACKUP_BUCKET }}/${{ inputs.backup-id }}/assets/ gcs:${{ inputs.bucket }}/
+      - name: Restore SQL
+        run: |
+          DUMP_NAME="db.dump"
+          rclone copy gcs:"${{ env.BACKUP_BUCKET }}/${{ inputs.backup-id }}/sql/" .
+          $POSTGRES/pg_restore --verbose --clean --if-exists --no-acl --no-owner -d ${{ env.DATABASE_URL }} "$DUMP_NAME"

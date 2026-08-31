@@ -1,0 +1,6 @@
+[submodule "submodules/better-auth"]
+	path = submodules/better-auth
+	url = https://github.com/better-auth/better-auth.git
+[submodule "submodules/payload"]
+	path = submodules/payload
+	url = https://github.com/payloadcms/payload.git

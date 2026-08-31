@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": false
+  },
+  "framework": "nextjs",
+  "buildCommand": "turbo build migrate",
+  "installCommand": "pnpm i",
+  "regions": ["fra1"]
+}

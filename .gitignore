@@ -1,0 +1,11 @@
+node_modules
+.idea
+*.iml
+.vercel
+.next
+.devedis
+.turbo
+.zed
+.claude/**/*.local.*
+dist
+*.tsbuildinfo

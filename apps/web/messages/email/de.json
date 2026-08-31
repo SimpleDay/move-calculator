@@ -1,0 +1,56 @@
+{
+  "SendVerificationEmail": {
+    "subject": "Bestätige deine Email",
+    "preview": "Bestätige deine Email",
+    "title": "Email bestätigen",
+    "link": "Klicke hier",
+    "description": "Klicke auf den Knopf, um deine Email zu bestätigen.",
+    "greeting": "Hallo",
+    "alternative": "oder kopiere diese URL und füge sie in deinen Browser ein: ",
+    "addendum": "Wenn du dies nicht angefordert hast, ignoriere diese Email bitte."
+  },
+  "SendResetPasswordEmail": {
+    "subject": "Setze dein Passwort zurück",
+    "preview": "Setze dein Passwort zurück",
+    "title": "Password zurücksetzen",
+    "link": "Klicke hier",
+    "description": "Klicke auf den Knopf, um dein Passwort zurückzusetzen.",
+    "greeting": "Hallo",
+    "alternative": "oder kopiere diese URL und füge sie in deinen Browser ein: ",
+    "addendum": "Wenn du dies nicht angefordert hast, ignoriere diese Email bitte."
+  },
+  "SendInvitationEmail": {
+    "subject": "Einladung",
+    "preview": "Einladung",
+    "title": "Einladung",
+    "link": "Klicke hier",
+    "description": "Klicke auf den Knopf, um die Einladung anzunehmen.",
+    "greeting": "Hallo",
+    "alternative": "oder kopiere diese URL und füge sie in deinen Browser ein: ",
+    "addendum": "Wenn du dies nicht angefordert hast, ignoriere diese Email bitte."
+  },
+  "SendPasswordChangedEmail": {
+    "subject": "Passwort geändert",
+    "preview": "Dein Passwort wurde geändert",
+    "title": "Passwort geändert",
+    "description": "Dein Passwort wurde erfolgreich geändert. Falls du diese Änderung nicht vorgenommen hast, kontaktiere bitte umgehend den Support.",
+    "greeting": "Hallo",
+    "addendum": "Falls du diese Änderung nicht vorgenommen hast, sichere bitte umgehend dein Konto."
+  },
+  "SendEmailChangeStartedEmail": {
+    "subject": "E-Mail-Änderung beantragt",
+    "preview": "Eine Änderung deiner E-Mail-Adresse wurde eingeleitet",
+    "title": "E-Mail-Änderung beantragt",
+    "description": "Es wurde eine Anfrage gestellt, die E-Mail-Adresse deines Kontos zu ändern.",
+    "greeting": "Hallo",
+    "addendum": "Falls du diese Änderung nicht beantragt hast, kontaktiere bitte umgehend den Support."
+  },
+  "SendUserBannedEmail": {
+    "subject": "Kontostatus-Aktualisierung",
+    "preview": "Wichtige Information zu deinem Konto",
+    "title": "Konto deaktiviert",
+    "description": "Dein Konto wurde deaktiviert. Bitte kontaktiere den Support für weitere Informationen.",
+    "greeting": "Hallo",
+    "addendum": "Falls du glaubst, dass dies ein Fehler ist, kontaktiere bitte unser Support-Team."
+  }
+}

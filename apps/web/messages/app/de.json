@@ -1,0 +1,13 @@
+{
+  "BootstrapPage": {
+    "eyebrow": "Zügelofferte",
+    "title": "Das Fundament steht.",
+    "description": "Als Nächstes entsteht hier der schnelle, geführte Offertenflow für Zügelunternehmen.",
+    "status": "WebApp-Basis bereit"
+  },
+  "404": {
+    "title": "Seite nicht gefunden",
+    "description": "Die Seite, die Sie suchen, existiert nicht oder wurde entfernt.",
+    "back": "Zurück zur Startseite"
+  }
+}

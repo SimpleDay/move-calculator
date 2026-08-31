@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: 'postgres:17'
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: zuegelofferte
+      POSTGRES_PASSWORD: zuegelofferte
+      POSTGRES_DB: zuegelofferte
+    restart: unless-stopped
+  mailpit:
+    image: 'axllent/mailpit:latest'
+    ports:
+      - 1025:1025
+      - 8025:8025
+    restart: unless-stopped

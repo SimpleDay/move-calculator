@@ -1,0 +1,21 @@
+# File containing the commit message
+COMMIT_MSG_FILE=$1
+
+# Check if the commit message already contains an issue ID (e.g., ABC-123)
+if grep -qiE '[a-zA-Z]{1,4}-[0-9]+' "$COMMIT_MSG_FILE"; then
+  echo "Issue ID already present in commit message. Skipping prepend."
+else
+  # Get the branch name
+  BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+
+  # Extract the issue ID from the branch name and convert to uppercase
+  ISSUE_ID=$(echo "$BRANCH_NAME" | grep -oiE '[a-zA-Z]{1,4}-[0-9]+' | head -n 1 | tr '[:lower:]' '[:upper:]')
+
+  # Prepend the issue ID to the commit message if found
+  if [ -n "$ISSUE_ID" ]; then
+    sed -i.bak "1s/^/$ISSUE_ID: /" "$COMMIT_MSG_FILE"
+  fi
+fi
+
+# Run commit lint
+pnpm lint:commit --edit "$COMMIT_MSG_FILE"

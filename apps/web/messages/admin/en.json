@@ -1,0 +1,51 @@
+{
+  "custom": {
+    "users": {
+      "plural": "Users",
+      "singular": "User"
+    },
+    "accounts": {
+      "plural": "Accounts",
+      "singular": "Account"
+    },
+    "invitations": {
+      "plural": "User Invitations",
+      "singular": "User Invitation",
+      "title": "Invitation",
+      "invalid": "Invalid invitation code",
+      "create": "Invite user"
+    },
+    "password": {
+      "tooShort": "Password must be at least 8 characters long"
+    },
+    "changeEmail": {
+      "title": "Change Email"
+    },
+    "changePassword": {
+      "currentPasswordLabel": "Current password",
+      "successfully": "Password changed successfully",
+      "backToAccount": "Back to account overview"
+    },
+    "signUp": {
+      "checkEmail": "Check your mailbox to verify your email address."
+    },
+    "error": {
+      "noValidInvitation": "No valid invitation found",
+      "passwordIncorrect": "Password incorrect",
+      "bannedUser": "User is not active"
+    },
+    "fields": {
+      "name": "Name"
+    },
+    "locale": {
+      "en": "English",
+      "de": "German"
+    },
+    "banned": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "label": "State",
+      "description": "Deactivating a user will revoke all their active sessions and inform the user via email."
+    }
+  }
+}

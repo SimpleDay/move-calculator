@@ -1,0 +1,13 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+  - 'actions/*'
+
+minimumReleaseAge: 2880 # 2 days
+
+onlyBuiltDependencies:
+  - '@sentry/cli'
+  - sharp
+
+overrides:
+  form-data: ^2.5.4

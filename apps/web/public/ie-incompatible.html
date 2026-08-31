@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unsupported Browser</title>
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+          text-align: center;
+          padding: 50px;
+          background-color: #f8f8f8;
+      }
+      .container {
+          max-width: 500px;
+          margin: auto;
+          background: white;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var isIE = /.*Trident.*/.test(window.navigator.userAgent);
+      if (!isIE) {
+        window.location.href = "/"; // Redirect to the main site if not IE
+      }
+    });
+  </script>
+</head>
+<body>
+<div class="container">
+  <h1>Browser Not Supported</h1>
+  <p>Sorry, but this site does not support Internet Explorer.</p>
+</div>
+</body>
+</html>

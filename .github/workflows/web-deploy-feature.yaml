@@ -1,0 +1,19 @@
+name: Feature Deployment (@zuegelofferte/web)
+on:
+  workflow_dispatch:
+concurrency:
+  group: web-deploy-feature-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: deploy
+        uses: ./actions/deploy-vercel-action
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-slug: ${{ vars.VERCEL_ORG_SLUG }}
+          vercel-project-slug: ${{ vars.WEB_VERCEL_PROJECT_SLUG }}
+          vercel-environment: 'preview'

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "envMode": "loose",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build", "generate"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "check:types": {
+      "dependsOn": ["^build", "generate"]
+    },
+    "test": {
+      "dependsOn": ["^build", "generate"],
+      "cache": false
+    },
+    "generate:importmap": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/app/\\(payload\\)/admin/importMap.js"]
+    },
+    "generate:types": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/payload-types.ts"]
+    },
+    "generate:schema": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/payload-generated-schema.ts"]
+    },
+    "generate": {
+      "dependsOn": ["generate:importmap", "generate:types", "generate:schema"]
+    },
+    "generate:migration": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "migrate": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "//#check:submodules": {
+      "inputs": ["scripts/checkSubmoduleVersions.mjs", "apps/web/package.json", ".gitmodules"]
+    }
+  }
+}

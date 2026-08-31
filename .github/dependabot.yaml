@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: .github/workflows
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: 'update actions'
+  - package-ecosystem: npm
+    directory: '/'
+    commit-message:
+      prefix: 'update dependencies'
+    schedule:
+      interval: monthly
+    groups:
+      eslint:
+        patterns:
+          - 'eslint*'
+          - '@eslint*'
+      payload:
+        patterns:
+          - 'payload*'
+          - '@payload*'
+      react:
+        patterns:
+          - 'react*'
+          - '@react*'
+      next:
+        patterns:
+          - 'next'
+          - 'next-*'
+      tailwind:
+        patterns:
+          - 'tailwind*'
+          - '@tailwind*'
+          - 'autoprefixer'
+          - 'postcss'
+      radix:
+        patterns:
+          - 'radix*'
+          - '@radix*'

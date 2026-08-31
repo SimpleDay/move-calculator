@@ -1,0 +1,35 @@
+name: Deploy Vercel Action
+inputs:
+  vercel-token:
+    description: 'Vercel Token'
+    required: true
+  vercel-org-slug:
+    description: 'Vercel Organization Slug'
+    required: true
+  vercel-project-slug:
+    description: 'Vercel Project Slug'
+    required: true
+  vercel-environment:
+    description: 'Vercel environment'
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: deploy
+      shell: bash
+      run: |
+        curl -f -X POST "https://api.vercel.com/v13/deployments?slug=${{ inputs.vercel-org-slug }}" \
+                    -H "Authorization: Bearer ${{ inputs.vercel-token }}" \
+                    -H "Content-Type: application/json" \
+                    -d '{
+                      "name": "${{ inputs.vercel-project-slug }}",
+                      "project": "${{ inputs.vercel-project-slug }}",
+                      ${{ inputs.vercel-environment != 'preview' && format('"target": "{0}",', inputs.vercel-environment) || '' }}
+                      "gitSource": {
+                        "type": "github",
+                        "org": "${{ github.repository_owner }}",
+                        "repo": "${{ github.event.repository.name }}",
+                        "ref": "${{ github.head_ref || github.ref_name }}",
+                        "sha": "${{ github.event.pull_request.head.sha || github.sha }}"
+                      }
+                    }'

@@ -1,0 +1,47 @@
+name: Nightly Backup (@zuegelofferte/web)
+on:
+  workflow_dispatch:
+env:
+  PG_VERSION: '17'
+  DATABASE_URL: ${{ secrets.WEB_DATABASE_URL }}
+  PRODUCTION_BUCKET: 'assets-zuegelofferte-web-production'
+  BACKUP_BUCKET: 'backup-zuegelofferte-web'
+jobs:
+  create-backups:
+    runs-on: ubuntu-latest
+    steps:
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
+      - name: Setup Rclone
+        uses: AnimMouse/setup-rclone@v1
+        with:
+          rclone_config: ${{ secrets.RCLONE_CONFIG_CONTENT }}
+      - name: create backup id
+        run: |
+          date=$(date '+%Y-%m-%d-%H%M%S')
+          echo "BACKUP_ID=$date" >> $GITHUB_ENV
+      - name: Install PostgreSQL
+        run: |
+          sudo apt update
+          yes '' | sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+          sudo apt install -y postgresql-${{ env.PG_VERSION }}
+          echo "POSTGRES=/usr/lib/postgresql/${{ env.PG_VERSION }}/bin" >> $GITHUB_ENV
+      - name: backup assets
+        run: |
+          rclone copy gcs:${{ env.PRODUCTION_BUCKET }} gcs:${{ env.BACKUP_BUCKET }}/${{ env.BACKUP_ID }}/assets/
+      - name: backup sql
+        run: |
+          DUMP_NAME="db.dump"
+          $POSTGRES/pg_dump ${{ env.DATABASE_URL }} -Fc -f "$DUMP_NAME"
+          rclone copy "$DUMP_NAME" gcs:${{ env.BACKUP_BUCKET }}/${{ env.BACKUP_ID }}/sql/
+      - name: alert on failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-Type: application/json' -d '{
+            "github_repository_name": "${{ github.repository }}",
+            "github_repository_url": "${{ github.server_url }}/${{ github.repository }}",
+            "github_workflow_name": "${{ github.workflow }}",
+            "github_action_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }' ${{ secrets.SLACK_WEBHOOK }}
